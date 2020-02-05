@@ -4,6 +4,7 @@ class CreatePackages < ActiveRecord::Migration[6.0]
       t.string :address
       t.string :date
       t.string :courier
+      t.references :unit, null: false, foreign_key: true
 
       t.timestamps
     end
