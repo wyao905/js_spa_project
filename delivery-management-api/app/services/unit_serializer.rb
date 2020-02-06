@@ -1,0 +1,2 @@
+class UnitSerializer
+end

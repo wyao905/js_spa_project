@@ -14,7 +14,6 @@ ActiveRecord::Schema.define(version: 2020_02_05_231327) do
 
   create_table "packages", force: :cascade do |t|
     t.string "address"
-    t.string "date"
     t.string "courier"
     t.integer "unit_id", null: false
     t.datetime "created_at", precision: 6, null: false

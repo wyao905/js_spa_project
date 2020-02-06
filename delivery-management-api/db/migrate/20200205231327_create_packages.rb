@@ -2,7 +2,6 @@ class CreatePackages < ActiveRecord::Migration[6.0]
   def change
     create_table :packages do |t|
       t.string :address
-      t.string :date
       t.string :courier
       t.references :unit, null: false, foreign_key: true
 
