@@ -10,6 +10,6 @@ class PackageSerializer
                 :message,
                 :tenant_name
             ]}
-        }, :except => [])
+        }, :except => [:update_at])
     end
 end
