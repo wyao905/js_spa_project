@@ -3,6 +3,7 @@ class CreateUnits < ActiveRecord::Migration[6.0]
     create_table :units do |t|
       t.string :number
       t.string :message
+      t.string :tenant_name
 
       t.timestamps
     end
