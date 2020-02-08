@@ -2,6 +2,11 @@ body {
     margin: 0;
     font-family: arial;
 }
+
+.form_title {
+    color: rgb(255, 255, 255);
+    text-shadow: 3px 3px rgb(58, 58, 58);
+}
   
 #unit-collection {
     margin: 2rem;
@@ -38,7 +43,7 @@ button:hover {
 
 .container {
     padding: 1rem;
-    width: stretch;
+    min-height: 12rem;
     height: auto;
     background: rgb(102, 106, 131);
     opacity: .8;
@@ -56,6 +61,7 @@ button:hover {
     justify-self: center;
     font-family: arial;
     margin: 3px;
+    box-shadow: 3px 3px rgb(58, 58, 58);
 }
   
 .submit:hover {
@@ -71,5 +77,6 @@ button:hover {
     font-size: 12px;
     font-family: arial;
     margin: 3px;
+    box-shadow: 3px 3px rgb(58, 58, 58);
 }
   
