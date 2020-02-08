@@ -1,3 +1,9 @@
+let address
+
+class Unit {
+    constructor()
+}
+
 window.addEventListener('DOMContentLoaded', (event) => {
     let packageForm = document.getElementsByClassName("add-package-form")[0]
     packageForm.hidden = true
@@ -6,6 +12,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     condoFormButton.addEventListener('click', (event) => {
         event.preventDefault()
-        
+        address = condoForm.getElementsByClassName("input-text")[0].value
+        condoForm.hidden = true
+        packageForm.hidden = false
     })
 });
