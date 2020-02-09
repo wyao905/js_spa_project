@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_05_231327) do
+ActiveRecord::Schema.define(version: 2020_02_09_210104) do
+
+  create_table "condos", force: :cascade do |t|
+    t.string "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "packages", force: :cascade do |t|
     t.string "address"
@@ -25,9 +31,12 @@ ActiveRecord::Schema.define(version: 2020_02_05_231327) do
     t.string "number"
     t.string "message"
     t.string "tenant_name"
+    t.integer "condo_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["condo_id"], name: "index_units_on_condo_id"
   end
 
   add_foreign_key "packages", "units"
+  add_foreign_key "units", "condos"
 end

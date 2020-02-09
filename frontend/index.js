@@ -55,6 +55,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 })
                 .then(function(condo) {
                 })
+        } else {
+            fetch(`http://localhost:3000/condos/`)
         }
 
         
