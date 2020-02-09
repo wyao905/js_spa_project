@@ -8,8 +8,8 @@
 
 condo = Condo.create(address: "123 Fourth Street")
 
-unit_007 = Unit.create(number: "007", tenant_name: "James")
-unit_115 = Unit.create(number: "115", tenant_name: "Tony")
+unit_007 = Unit.create(number: "007", tenant_name: "James", condo: condo)
+unit_115 = Unit.create(number: "115", tenant_name: "Tony", condo: condo)
 
 package_1 = Package.create(
     address: "123 Fourth Street, Unit 007",
