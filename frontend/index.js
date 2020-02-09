@@ -1,7 +1,27 @@
-let address
+let currentCondo
+let allCondos = []
+let allUnits = []
+let allPackages = []
+
+class Condo {
+    constructor(address) {
+        this.address = address
+    }
+}
 
 class Unit {
-    constructor()
+    constructor(num, tenantName) {
+        this.number = num
+        this.tenantName = tenantName
+    }
+}
+
+class Package {
+    constructor(address, courier, unit) {
+        this.address = address
+        this.courier = courier
+        this.unit = unit
+    }
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -12,8 +32,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     condoFormButton.addEventListener('click', (event) => {
         event.preventDefault()
-        address = condoForm.getElementsByClassName("input-text")[0].value
+        let address = condoForm.getElementsByClassName("input-text")[0].value
         condoForm.hidden = true
         packageForm.hidden = false
+        currentCondo = allCondos.find(obj => {return obj.address === address})
+        if(!currentCondo) {
+            currentCondo = new Condo(address)
+            allCondos.push(currentCondo)
+            // save new condo to server using fetch
+        }
+
+        
     })
 });
