@@ -1,11 +1,13 @@
 class PackagesController < ApplicationController
     def index
         packages = Package.all
-        render json: PackageSerializer.new(packages).to_serialized_json
+        options = {include: [:unit]}
+        render json: PackageSerializer.new(packages, options)
     end
 
     def show
         package = Package.find_by(id: params[:id])
-        render json: PackageSerializer.new(package).to_serialized_json
+        options = {include: [:unit]}
+        render json: PackageSerializer.new(packages, options)
     end
 end
