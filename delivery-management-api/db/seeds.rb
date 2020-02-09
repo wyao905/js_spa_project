@@ -6,6 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+condo = Condo.create(address: "123 Fourth Street")
+
 unit_007 = Unit.create(number: "007", tenant_name: "James")
 unit_115 = Unit.create(number: "115", tenant_name: "Tony")
 
