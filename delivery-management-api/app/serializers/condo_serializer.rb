@@ -1,4 +1,6 @@
 class CondoSerializer
   include FastJsonapi::ObjectSerializer
-  attributes 
+  attributes :address
+  
+  has_many :units
 end

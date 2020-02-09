@@ -1,4 +1,6 @@
 class PackageSerializer
   include FastJsonapi::ObjectSerializer
-  attributes 
+  attributes :address, :courier, :created_at
+
+  belongs_to :unit
 end
