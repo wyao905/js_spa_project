@@ -39,7 +39,22 @@ window.addEventListener('DOMContentLoaded', (event) => {
         if(!currentCondo) {
             currentCondo = new Condo(address)
             allCondos.push(currentCondo)
-            // save new condo to server using fetch
+
+            let configObj = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(currentCondo)
+            }
+            
+            fetch("http://localhost:3000/condos", configObj)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(condo) {
+                })
         }
 
         
