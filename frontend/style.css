@@ -1,15 +1,35 @@
 body {
     margin: 0;
     font-family: arial;
+    background-color: rgb(197, 205, 255);
 }
 
-.form_title {
+.form-title {
     color: rgb(255, 255, 255);
     text-shadow: 3px 3px rgb(58, 58, 58);
 }
   
 #unit-collection {
-    margin: 2rem;
+    border-width: 5px;  
+    border-style: solid;
+    border-color: rgb(155, 157, 165);
+    padding: 1rem;
+    margin: 1.5rem;
+    background: rgb(102, 106, 131);
+    min-height: 100%;
+    height: auto;
+    opacity: 0.8;
+    display: flex;
+}
+  
+.units {
+    flex: 0 0 73%;
+    background: rgb(46, 78, 32);
+}
+  
+.unit-info {
+    flex: 1;
+    background: rgb(105, 38, 38);
 }
   
 .card {
@@ -42,8 +62,11 @@ button:hover {
 } */
 
 .container {
-    padding: 1rem;
-    min-height: 12rem;
+    border-width: 20px;  
+    border-bottom: solid;
+    border-color: rgb(155, 157, 165);
+    padding: 1.5rem;
+    /* min-height: 12rem; */
     height: auto;
     background: rgb(102, 106, 131);
     opacity: .8;
