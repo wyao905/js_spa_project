@@ -41,8 +41,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 return response.json()
             })
             .then(function(condoList) {
-                allCondos = condoList.data
-                currentCondo = allCondos.find(obj => {return obj.attributes.address === address})
+                currentCondo = condoList.data.find(obj => {return obj.attributes.address === address})
                 if(!currentCondo) {
                     currentCondo = new Condo(address)
 
@@ -63,11 +62,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             currentCondo.id = condo.data.id
                         })
                 }
-            })
-        
-        
-        fetch(`http://localhost:3000/condos/${currentCondo.id}`)
+                let packageFormButton = packageForm.getElementsByClassName("submit")[0]
 
-        
+                packageFormButton.addEventListener('click', (event) => {
+                    event.preventDefault()
+                    console.log(currentCondo.attributes.address)
+                    console.log(currentCondo.id)
+
+                })
+            })
+
     })
 });
