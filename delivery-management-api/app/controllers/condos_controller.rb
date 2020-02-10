@@ -4,4 +4,10 @@ class CondosController < ApplicationController
         options = {include: [:units]}
         render json: CondoSerializer.new(condo, options)
     end
+
+    def create
+        condo = Condo.create(address: params[:address])
+        options = {include: [:units]}
+        render json: CondoSerializer.new(condo, options)
+    end
 end

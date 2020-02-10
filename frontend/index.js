@@ -54,9 +54,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     return response.json();
                 })
                 .then(function(condo) {
+                    currentCondo.id = condo.data.id
                 })
         } else {
-            fetch(`http://localhost:3000/condos/`)
+            fetch(`http://localhost:3000/condos/${currentCondo.id}`)
         }
 
         
