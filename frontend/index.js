@@ -35,30 +35,38 @@ window.addEventListener('DOMContentLoaded', (event) => {
         let address = condoForm.getElementsByClassName("input-text")[0].value
         condoForm.hidden = true
         packageForm.hidden = false
-        currentCondo = allCondos.find(obj => {return obj.address === address})
-        if(!currentCondo) {
-            currentCondo = new Condo(address)
-            allCondos.push(currentCondo)
 
-            let configObj = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify(currentCondo)
-            }
-            
-            fetch("http://localhost:3000/condos", configObj)
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(condo) {
-                    currentCondo.id = condo.data.id
-                })
-        } else {
-            fetch(`http://localhost:3000/condos/${currentCondo.id}`)
-        }
+        fetch("http://localhost:3000/condos")
+            .then(function(response) {
+                return response.json()
+            })
+            .then(function(condoList) {
+                allCondos = condoList.data
+                currentCondo = allCondos.find(obj => {return obj.attributes.address === address})
+                if(!currentCondo) {
+                    currentCondo = new Condo(address)
+
+                    let configObj = {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify(currentCondo)
+                    }
+                    
+                    fetch("http://localhost:3000/condos", configObj)
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(condo) {
+                            currentCondo.id = condo.data.id
+                        })
+                }
+            })
+        
+        
+        fetch(`http://localhost:3000/condos/${currentCondo.id}`)
 
         
     })

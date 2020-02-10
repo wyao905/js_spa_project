@@ -1,4 +1,10 @@
 class CondosController < ApplicationController
+    def index
+        condos = Condo.all
+        options = {include: [:units]}
+        render json: CondoSerializer.new(condos, options)
+    end
+    
     def show
         condo = Condo.find(params[:id])
         options = {include: [:units]}
