@@ -29,6 +29,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     packageForm.hidden = true
     let condoForm = document.getElementsByClassName("condo-form")[0]
     let condoFormButton = condoForm.getElementsByClassName("submit")[0]
+    let unitContainer = document.getElementsByClassName("units")[0]
 
     condoFormButton.addEventListener('click', (event) => {
         event.preventDefault()
@@ -43,7 +44,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             .then(function(condoList) {
                 currentCondo = condoList.data.find(obj => {return obj.attributes.address === address})
                 if(!currentCondo) {
-                    currentCondo = new Condo(address)
+                    let newCondo = new Condo(address)
 
                     let configObj = {
                         method: "POST",
@@ -51,7 +52,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             "Content-Type": "application/json",
                             "Accept": "application/json"
                         },
-                        body: JSON.stringify(currentCondo)
+                        body: JSON.stringify(newCondo)
                     }
                     
                     fetch("http://localhost:3000/condos", configObj)
@@ -59,7 +60,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             return response.json();
                         })
                         .then(function(condo) {
-                            currentCondo.id = condo.data.id
+                            currentCondo = condo.data
                         })
                 }
                 let packageFormButton = packageForm.getElementsByClassName("submit")[0]
@@ -70,7 +71,28 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     console.log(currentCondo.id)
 
                 })
-            })
 
+                fetch("http://localhost:3000/units")
+                    .then(function(response) {
+                        return response.json()
+                    })
+                    .then(function(unitList) {
+                        units = unitList.data.filter(unit => unit.relationships.condo.data.id === currentCondo.id)
+                        let floorLayout = []
+                        units.forEach(unitInfo => {
+                            let unit = new Unit(unitInfo.attributes.number, unitInfo.attributes.tenant_name)
+                            allUnits.push(unit)
+                            if(!Object.keys(floorLayout).includes(unit.number.charAt(0))) {
+                                floorLayout[unit.number.charAt(0)] = []
+                            }
+                        })
+
+                        let floors = Object.keys(floorLayout)
+                        for(let i = 0; i < floors.slice(-1)[0]; i++) {
+                        }
+                        console.log(floorLayout)
+                        console.log(floors)
+                    })
+            })
     })
 });
