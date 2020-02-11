@@ -94,7 +94,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 floorLayout[i].sort((a, b) => a.number - b.number)
                             }
                             let floorContainer = document.createElement("div")
-                            floorContainer.className = i
+                            floorContainer.className = "unit-floor"
+                            floorContainer.id = i
                             unitContainer.appendChild(floorContainer)
 
                         }
