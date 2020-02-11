@@ -100,7 +100,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 for(let j = 0; j < floorLayout[i].length; j++) {
                                     let unitButton = document.createElement("button")
                                     unitButton.innerHTML = floorLayout[i][j].number
+                                    unitButton.className = "unit"
+                                    unitButton.id = floorLayout[i][j].number
                                     floorContainer.appendChild(unitButton)
+
+                                    unitButton.addEventListener('click', (event) => {
+
+                                    })
                                 }
                             }
                         }
