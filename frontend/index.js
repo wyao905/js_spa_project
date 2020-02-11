@@ -105,7 +105,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             unitContainer.appendChild(floorContainer)
 
                             let floorLabel = document.createElement("p")
-                            floorLabel.innerText = `${i}F`
+                            floorLabel.innerText = `${i}-FLOOR`
+                            floorLabel.className = "floor-label"
                             floorContainer.appendChild(floorLabel)
 
                             if(!!floorLayout[i]) {

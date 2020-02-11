@@ -32,9 +32,15 @@ body {
 .unit-floor {
     border: rgb(155, 157, 165) solid 1px;
     padding: 1rem;
-    margin: 1rem 2rem;
+    margin: 1rem;
     background: rgb(61, 63, 70);
     box-shadow: 3px 3px rgb(58, 58, 58)
+}
+
+.floor-label {
+    color: rgb(255, 255, 255);
+    text-shadow: 3px 3px rgb(58, 58, 58);
+    margin: 5px 0;
 }
   
 /* button {
