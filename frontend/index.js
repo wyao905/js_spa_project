@@ -85,10 +85,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             if(!Object.keys(floorLayout).includes(unit.number.charAt(0))) {
                                 floorLayout[unit.number.charAt(0)] = []
                             }
+                            floorLayout[unit.number.charAt(0)].push(unit)
                         })
-
+                        
                         let floors = Object.keys(floorLayout)
-                        for(let i = 0; i < floors.slice(-1)[0]; i++) {
+                        for(let i = 0; i <= floors.slice(-1)[0]; i++) {
+                            if(!!floorLayout[i]) {
+                                floorLayout[i].sort((a, b) => a.number - b.number)
+                            }
+                            let floorContainer = document.createElement("div")
+                            floorContainer.className = i
+                            unitContainer.appendChild(floorContainer)
+
                         }
                         console.log(floorLayout)
                         console.log(floors)
