@@ -10,37 +10,31 @@ body {
 }
   
 #unit-collection {
-    border-width: 5px;  
-    border-style: solid;
-    border-color: rgb(155, 157, 165);
-    padding: 1rem;
     margin: 1.5rem;
     background: rgb(102, 106, 131);
-    min-height: 100%;
     height: auto;
     opacity: 0.8;
     display: flex;
 }
   
 .units {
+    border: rgb(155, 157, 165) solid 5px;
+    border-right: 0;
     flex: 0 0 73%;
-    background: rgb(46, 78, 32);
 }
   
 .unit-info {
     flex: 1;
+    border: rgb(155, 157, 165) solid 5px;
     background: rgb(105, 38, 38);
 }
-  
-.card {
-    text-align: center;
-    border: grey solid 1px;
+ 
+.unit-floor {
+    border: rgb(155, 157, 165) solid 1px;
     padding: 1rem;
-    width: 15rem;
-    height: 25rem;
-    display: inline-grid;
     margin: 1rem 2rem;
-    box-shadow: 3px 4px #e04b52
+    background: rgb(61, 63, 70);
+    box-shadow: 3px 3px rgb(58, 58, 58)
 }
   
 /* button {
@@ -66,7 +60,6 @@ button:hover {
     border-bottom: solid;
     border-color: rgb(155, 157, 165);
     padding: 1.5rem;
-    /* min-height: 12rem; */
     height: auto;
     background: rgb(102, 106, 131);
     opacity: .8;

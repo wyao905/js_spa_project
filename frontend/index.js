@@ -30,12 +30,20 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let condoForm = document.getElementsByClassName("condo-form")[0]
     let condoFormButton = condoForm.getElementsByClassName("submit")[0]
     let unitContainer = document.getElementsByClassName("units")[0]
+    unitContainer.hidden = true
+    let unitInfo = document.getElementsByClassName("unit-info")[0]
+    unitInfo.hidden = true
+    let unitCollection = document.getElementById("unit-collection")
+    unitCollection.hidden = true
 
     condoFormButton.addEventListener('click', (event) => {
         event.preventDefault()
         let address = condoForm.getElementsByClassName("input-text")[0].value
         condoForm.hidden = true
         packageForm.hidden = false
+        unitCollection.hidden = false
+        unitInfo.hidden = false
+        unitContainer.hidden = false
 
         fetch("http://localhost:3000/condos")
             .then(function(response) {
@@ -93,11 +101,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             let floorContainer = document.createElement("div")
                             floorContainer.className = "unit-floor"
                             floorContainer.id = i
+                            floorContainer.hidden = true
                             unitContainer.appendChild(floorContainer)
+
+                            let floorLabel = document.createElement("p")
+                            floorLabel.innerText = `${i}F`
+                            floorContainer.appendChild(floorLabel)
 
                             if(!!floorLayout[i]) {
                                 floorLayout[i].sort((a, b) => a.number - b.number)
                                 for(let j = 0; j < floorLayout[i].length; j++) {
+                                    floorContainer.hidden = false
                                     let unitButton = document.createElement("button")
                                     unitButton.innerHTML = floorLayout[i][j].number
                                     unitButton.className = "unit"
