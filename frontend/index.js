@@ -120,7 +120,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                     floorContainer.appendChild(unitButton)
 
                                     unitButton.addEventListener('click', (event) => {
-
+                                        // event for unit info page
                                     })
                                 }
                             }
@@ -129,3 +129,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             })
     })
 });
+
+function newUnit() {
+
+}
