@@ -75,9 +75,27 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
                 packageFormButton.addEventListener('click', (event) => {
                     event.preventDefault()
-                    console.log(currentCondo.attributes.address)
-                    console.log(currentCondo.id)
+                    let packageAdd = packageForm.getElementsByClassName("input-text")[0].value
+                    let packageUnit = packageForm.getElementsByClassName("input-text")[1].value
+                    let packageCourier = packageForm.getElementsByClassName("input-text")[2].value
 
+                    let newPack = new Package(packageAdd, packageCourier, packageUnit)
+
+                    let configObj = {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify(newPack)
+                    }
+
+                    fetch("http://localhost:3000/packages", configObj)
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(package) {
+                        })
                 })
 
                 fetch("http://localhost:3000/units")

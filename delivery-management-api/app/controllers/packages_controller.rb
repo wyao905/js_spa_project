@@ -10,4 +10,19 @@ class PackagesController < ApplicationController
         options = {include: [:unit]}
         render json: PackageSerializer.new(packages, options)
     end
+
+    def create
+        unit = Unit.find_by(number: params[:unit])
+        if !unit
+            binding.pry
+            condo = Condo.find_by(address: params[:address])
+            unit = condo.units.build(number: params[:unit])
+            condo.save
+        end
+        package = unit.packages.build(address: params[:address], courier: params[:courier])
+        unit.save
+
+        options = {include: [:unit]}
+        render json: PackageSerializer.new(package, options)
+    end
 end
