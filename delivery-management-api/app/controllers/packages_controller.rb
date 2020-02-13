@@ -14,7 +14,6 @@ class PackagesController < ApplicationController
     def create
         unit = Unit.find_by(number: params[:unit])
         if !unit
-            binding.pry
             condo = Condo.find_by(address: params[:address])
             unit = condo.units.build(number: params[:unit])
             condo.save

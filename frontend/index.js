@@ -50,7 +50,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 return response.json()
             })
             .then(function(condoList) {
-                currentCondo = condoList.data.find(obj => {return obj.attributes.address === address})
+                currentCondo = condoList.data.find(obj => obj.attributes.address === address)
                 if(!currentCondo) {
                     let newCondo = new Condo(address)
 
@@ -95,6 +95,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             return response.json();
                         })
                         .then(function(package) {
+                            let newPackageUnit = package.included[0].attributes
+                            let foundUnit = allUnits.find(unit => unit.number === newPackageUnit.number)
+                            if(!!foundUnit) {
+                                //if found unit, add necessary unit button, else create and add unit instance to all units
+                            }
                         })
                 })
 
@@ -107,6 +112,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         let floorLayout = []
                         units.forEach(unitInfo => {
                             let unit = new Unit(unitInfo.attributes.number, unitInfo.attributes.tenant_name)
+                            allUnits.push(unit)
                             if(!Object.keys(floorLayout).includes(unit.number.charAt(0))) {
                                 floorLayout[unit.number.charAt(0)] = []
                             }
@@ -137,7 +143,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                     floorContainer.appendChild(unitButton)
 
                                     unitButton.addEventListener('click', (event) => {
-                                        // event for unit info page
                                     })
                                 }
                             }
