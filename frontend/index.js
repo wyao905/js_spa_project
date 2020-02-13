@@ -107,7 +107,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         let floorLayout = []
                         units.forEach(unitInfo => {
                             let unit = new Unit(unitInfo.attributes.number, unitInfo.attributes.tenant_name)
-                            allUnits.push(unit)
                             if(!Object.keys(floorLayout).includes(unit.number.charAt(0))) {
                                 floorLayout[unit.number.charAt(0)] = []
                             }
