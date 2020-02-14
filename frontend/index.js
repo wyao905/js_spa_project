@@ -51,6 +51,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             })
             .then(function(condoList) {
                 currentCondo = condoList.data.find(obj => obj.attributes.address === address)
+                let floorLayout = []
+
                 if(!currentCondo) {
                     let newCondo = new Condo(address)
 
@@ -97,9 +99,35 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         .then(function(package) {
                             let newPackageUnit = package.included[0].attributes
                             let foundUnit = allUnits.find(unit => unit.number === newPackageUnit.number)
-                            if(!!foundUnit) {
-                                //if found unit, add necessary unit button, else create and add unit instance to all units
+                            if(!foundUnit) {
+                                let newUnit = new Unit(newPackageUnit.number)
+                                allUnits.push(newUnit)
+
+                                let floors = unitContainer.getElementsByClassName("unit-floor")
+                                // let floorContainer = document.createElement("div")
+                                // floorContainer.className = "unit-floor"
+                                // floorContainer.id = i
+                                // floorContainer.hidden = true
+                                // unitContainer.appendChild(floorContainer)
+
+                                // let floorLabel = document.createElement("p")
+                                // floorLabel.innerText = `${i}-FLOOR`
+                                // floorLabel.className = "floor-label"
+                                // floorContainer.appendChild(floorLabel)
                             }
+
+                            // floorLayout[i].sort((a, b) => a.number - b.number)
+                            // for(let j = 0; j < floorLayout[i].length; j++) {
+                            //     floorContainer.hidden = false
+                            //     let unitButton = document.createElement("button")
+                            //     unitButton.innerHTML = floorLayout[i][j].number
+                            //     unitButton.className = "unit"
+                            //     unitButton.id = floorLayout[i][j].number
+                            //     floorContainer.appendChild(unitButton)
+                            //     unitButton.addEventListener('click', (event) => {
+                            //         //make function for unit button show
+                            //     })
+                            // }
                         })
                 })
 
@@ -109,7 +137,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     })
                     .then(function(unitList) {
                         units = unitList.data.filter(unit => unit.relationships.condo.data.id === currentCondo.id)
-                        let floorLayout = []
                         units.forEach(unitInfo => {
                             let unit = new Unit(unitInfo.attributes.number, unitInfo.attributes.tenant_name)
                             allUnits.push(unit)
@@ -143,6 +170,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                     floorContainer.appendChild(unitButton)
 
                                     unitButton.addEventListener('click', (event) => {
+                                        //make function for unit button show
                                     })
                                 }
                             }
@@ -151,7 +179,3 @@ window.addEventListener('DOMContentLoaded', (event) => {
             })
     })
 });
-
-function newUnit() {
-
-}
