@@ -102,32 +102,42 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             if(!foundUnit) {
                                 let newUnit = new Unit(newPackageUnit.number)
                                 allUnits.push(newUnit)
+                                floorLayout[newUnit.number.charAt(0)] = []
+                                floorLayout[newUnit.number.charAt(0)].push(newUnit)
+                                
+                                let floorDivs = unitContainer.getElementsByClassName("unit-floor")
+                                let floors = []
+                                for(let i = 0; i < floorDivs.length; i++) {
+                                    floors.push(floorDivs[i])
+                                }
+                                
+                                let floorContainer = document.createElement("div")
+                                let currentFloorDiv = floors.find(f => f.id === newPackageUnit.number.charAt(0))
+                                if(!currentFloorDiv) {
+                                    floorContainer.className = "unit-floor"
+                                    floorContainer.id = currentFloorDiv.id
+                                    unitContainer.appendChild(floorContainer)
+                                    currentFloorDiv = floorContainer
+                                }
 
-                                let floors = unitContainer.getElementsByClassName("unit-floor")
-                                // let floorContainer = document.createElement("div")
-                                // floorContainer.className = "unit-floor"
-                                // floorContainer.id = i
-                                // floorContainer.hidden = true
-                                // unitContainer.appendChild(floorContainer)
+                                currentFloorDiv.innerHTML = ""
+                                let floorLabel = document.createElement("p")
+                                floorLabel.innerText = `${currentFloorDiv.id}-FLOOR`
+                                floorLabel.className = "floor-label"
+                                currentFloorDiv.appendChild(floorLabel)
 
-                                // let floorLabel = document.createElement("p")
-                                // floorLabel.innerText = `${i}-FLOOR`
-                                // floorLabel.className = "floor-label"
-                                // floorContainer.appendChild(floorLabel)
+                                floorLayout[currentFloorDiv.id].sort((a, b) => a.number - b.number)
+                                for(let i = 0; i < floorLayout[currentFloorDiv.id].length; i++) {
+                                    let unitButton = document.createElement("button")
+                                    unitButton.innerHTML = floorLayout[currentFloorDiv.id][i].number
+                                    unitButton.className = "unit"
+                                    unitButton.id = floorLayout[currentFloorDiv.id][i].number
+                                    currentFloorDiv.appendChild(unitButton)
+                                    
+                                    unitButton.addEventListener('click', (event) => {
+                                    })
+                                }
                             }
-
-                            // floorLayout[i].sort((a, b) => a.number - b.number)
-                            // for(let j = 0; j < floorLayout[i].length; j++) {
-                            //     floorContainer.hidden = false
-                            //     let unitButton = document.createElement("button")
-                            //     unitButton.innerHTML = floorLayout[i][j].number
-                            //     unitButton.className = "unit"
-                            //     unitButton.id = floorLayout[i][j].number
-                            //     floorContainer.appendChild(unitButton)
-                            //     unitButton.addEventListener('click', (event) => {
-                            //         //make function for unit button show
-                            //     })
-                            // }
                         })
                 })
 
