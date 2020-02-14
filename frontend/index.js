@@ -102,23 +102,27 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             if(!foundUnit) {
                                 let newUnit = new Unit(newPackageUnit.number)
                                 allUnits.push(newUnit)
-                                floorLayout[newUnit.number.charAt(0)] = []
-                                floorLayout[newUnit.number.charAt(0)].push(newUnit)
-                                
+
                                 let floorDivs = unitContainer.getElementsByClassName("unit-floor")
                                 let floors = []
                                 for(let i = 0; i < floorDivs.length; i++) {
                                     floors.push(floorDivs[i])
                                 }
                                 
-                                let floorContainer = document.createElement("div")
                                 let currentFloorDiv = floors.find(f => f.id === newPackageUnit.number.charAt(0))
                                 if(!currentFloorDiv) {
-                                    floorContainer.className = "unit-floor"
-                                    floorContainer.id = currentFloorDiv.id
-                                    unitContainer.appendChild(floorContainer)
-                                    currentFloorDiv = floorContainer
+                                    for(let i = 1; i <= (newUnit.number.charAt(0) - floors.slice(-1)[0].id); i++) {
+                                        let floorContainer = document.createElement("div")
+                                        floorContainer.className = "unit-floor"
+                                        floorContainer.id = floors.slice(-1)[0].id + i
+                                        floorContainer.hidden = true
+                                        unitContainer.appendChild(floorContainer)
+                                        currentFloorDiv = floorContainer
+                                    }
+                                    floorLayout[currentFloorDiv.id] = []
                                 }
+
+                                floorLayout[currentFloorDiv.id].push(newUnit)
 
                                 currentFloorDiv.innerHTML = ""
                                 let floorLabel = document.createElement("p")
