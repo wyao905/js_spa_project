@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 2020_02_09_210104) do
 
   create_table "units", force: :cascade do |t|
     t.string "number"
-    t.string "message"
     t.string "tenant_name"
     t.integer "condo_id", null: false
     t.datetime "created_at", precision: 6, null: false

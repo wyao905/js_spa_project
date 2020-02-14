@@ -15,22 +15,22 @@ unit_613 = Unit.create(number: "613", tenant_name: "Clint", condo: condo)
 unit_010 = Unit.create(number: "010", tenant_name: "Steve", condo: condo)
 
 package_1 = Package.create(
-    address: "123 Fourth Street, Unit 007",
+    address: "123 Fourth Street",
     courier: "Fedex",
     unit: unit_007
 )
 package_2 = Package.create(
-    address: "123 Fourth Street, Unit 115",
+    address: "123 Fourth Street",
     courier: "Amazon",
     unit: unit_115
 )
 package_3 = Package.create(
-    address: "122 Fourth Street, Unit 007",
+    address: "122 Fourth Street",
     courier: "Amazon",
     unit: unit_007
 )
 package_4 = Package.create(
-    address: "123 Fourth Street, Unit 007",
+    address: "123 Fourth Street",
     courier: "Fedex",
     unit: unit_007
 )

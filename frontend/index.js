@@ -114,11 +114,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                     for(let i = 1; i <= (newUnit.number.charAt(0) - floors.slice(-1)[0].id); i++) {
                                         let floorContainer = document.createElement("div")
                                         floorContainer.className = "unit-floor"
-                                        floorContainer.id = floors.slice(-1)[0].id + i
+                                        floorContainer.id = parseInt(floors.slice(-1)[0].id) + i
                                         floorContainer.hidden = true
                                         unitContainer.appendChild(floorContainer)
                                         currentFloorDiv = floorContainer
                                     }
+                                    floorLayout[currentFloorDiv.id] = []
+                                } else if(currentFloorDiv.hidden) {
                                     floorLayout[currentFloorDiv.id] = []
                                 }
 
@@ -128,9 +130,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 let floorLabel = document.createElement("p")
                                 floorLabel.innerText = `${currentFloorDiv.id}-FLOOR`
                                 floorLabel.className = "floor-label"
+
                                 currentFloorDiv.appendChild(floorLabel)
 
                                 floorLayout[currentFloorDiv.id].sort((a, b) => a.number - b.number)
+                                currentFloorDiv.hidden = false
                                 for(let i = 0; i < floorLayout[currentFloorDiv.id].length; i++) {
                                     let unitButton = document.createElement("button")
                                     unitButton.innerHTML = floorLayout[currentFloorDiv.id][i].number
@@ -175,8 +179,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
                             if(!!floorLayout[i]) {
                                 floorLayout[i].sort((a, b) => a.number - b.number)
+                                floorContainer.hidden = false
                                 for(let j = 0; j < floorLayout[i].length; j++) {
-                                    floorContainer.hidden = false
                                     let unitButton = document.createElement("button")
                                     unitButton.innerHTML = floorLayout[i][j].number
                                     unitButton.className = "unit"
