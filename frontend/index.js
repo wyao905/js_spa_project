@@ -105,16 +105,22 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
                                 let floorDivs = unitContainer.getElementsByClassName("unit-floor")
                                 let floors = []
-                                for(let i = 0; i < floorDivs.length; i++) {
-                                    floors.push(floorDivs[i])
+                                let highestFloorDivId
+                                if(!floorDivs.length) {
+                                    highestFloorDivId = -1
+                                } else {
+                                    for(let i = 0; i < floorDivs.length; i++) {
+                                        floors.push(floorDivs[i])
+                                    }
+                                    highestFloorDivId = floors.slice(-1)[0].id
                                 }
                                 
                                 let currentFloorDiv = floors.find(f => f.id === newPackageUnit.number.charAt(0))
                                 if(!currentFloorDiv) {
-                                    for(let i = 1; i <= (newUnit.number.charAt(0) - floors.slice(-1)[0].id); i++) {
+                                    for(let i = 1; i <= (newUnit.number.charAt(0) - highestFloorDivId); i++) {
                                         let floorContainer = document.createElement("div")
                                         floorContainer.className = "unit-floor"
-                                        floorContainer.id = parseInt(floors.slice(-1)[0].id) + i
+                                        floorContainer.id = parseInt(highestFloorDivId) + i
                                         floorContainer.hidden = true
                                         unitContainer.appendChild(floorContainer)
                                         currentFloorDiv = floorContainer
