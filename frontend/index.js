@@ -36,6 +36,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let unitCollection = document.getElementById("unit-collection")
     unitCollection.hidden = true
 
+    let floorLayout = []
+
     condoFormButton.addEventListener('click', (event) => {
         event.preventDefault()
         let address = condoForm.getElementsByClassName("input-text")[0].value
@@ -51,8 +53,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             })
             .then(function(condoList) {
                 currentCondo = condoList.data.find(obj => obj.attributes.address === address)
-                let floorLayout = []
-
+                
                 if(!currentCondo) {
                     let newCondo = new Condo(address)
 
@@ -97,60 +98,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             return response.json();
                         })
                         .then(function(package) {
-                            let newPackageUnit = package.included[0].attributes
-                            let foundUnit = allUnits.find(unit => unit.number === newPackageUnit.number)
+                            let newPackageUnitNum = package.included[0].attributes.number
+                            let foundUnit = allUnits.find(unit => unit.number === newPackageUnitNum)
                             if(!foundUnit) {
-                                let newUnit = new Unit(newPackageUnit.number)
-                                allUnits.push(newUnit)
-
-                                let floorDivs = unitContainer.getElementsByClassName("unit-floor")
-                                let floors = []
-                                let highestFloorDivId
-                                if(!floorDivs.length) {
-                                    highestFloorDivId = -1
-                                } else {
-                                    for(let i = 0; i < floorDivs.length; i++) {
-                                        floors.push(floorDivs[i])
-                                    }
-                                    highestFloorDivId = floors.slice(-1)[0].id
-                                }
-                                
-                                let currentFloorDiv = floors.find(f => f.id === newPackageUnit.number.charAt(0))
-                                if(!currentFloorDiv) {
-                                    for(let i = 1; i <= (newUnit.number.charAt(0) - highestFloorDivId); i++) {
-                                        let floorContainer = document.createElement("div")
-                                        floorContainer.className = "unit-floor"
-                                        floorContainer.id = parseInt(highestFloorDivId) + i
-                                        floorContainer.hidden = true
-                                        unitContainer.appendChild(floorContainer)
-                                        currentFloorDiv = floorContainer
-                                    }
-                                    floorLayout[currentFloorDiv.id] = []
-                                } else if(currentFloorDiv.hidden) {
-                                    floorLayout[currentFloorDiv.id] = []
-                                }
-
-                                floorLayout[currentFloorDiv.id].push(newUnit)
-
-                                currentFloorDiv.innerHTML = ""
-                                let floorLabel = document.createElement("p")
-                                floorLabel.innerText = `${currentFloorDiv.id}-FLOOR`
-                                floorLabel.className = "floor-label"
-
-                                currentFloorDiv.appendChild(floorLabel)
-
-                                floorLayout[currentFloorDiv.id].sort((a, b) => a.number - b.number)
-                                currentFloorDiv.hidden = false
-                                for(let i = 0; i < floorLayout[currentFloorDiv.id].length; i++) {
-                                    let unitButton = document.createElement("button")
-                                    unitButton.innerHTML = floorLayout[currentFloorDiv.id][i].number
-                                    unitButton.className = "unit"
-                                    unitButton.id = floorLayout[currentFloorDiv.id][i].number
-                                    currentFloorDiv.appendChild(unitButton)
-                                    
-                                    unitButton.addEventListener('click', (event) => {
-                                    })
-                                }
+                                addNewUnit(newPackageUnitNum)
                             }
                         })
                 })
@@ -202,4 +153,58 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     })
             })
     })
+
+    function addNewUnit(unitNum) {
+        let newUnit = new Unit(unitNum)
+        allUnits.push(newUnit)
+
+        let floorDivs = unitContainer.getElementsByClassName("unit-floor")
+        let floors = []
+        let highestFloorDivId
+        if(!floorDivs.length) {
+            highestFloorDivId = -1
+        } else {
+            for(let i = 0; i < floorDivs.length; i++) {
+                floors.push(floorDivs[i])
+            }
+            highestFloorDivId = floors.slice(-1)[0].id
+        }
+                                
+        let currentFloorDiv = floors.find(f => f.id === unitNum.charAt(0))
+        if(!currentFloorDiv) {
+            for(let i = 1; i <= (newUnit.number.charAt(0) - highestFloorDivId); i++) {
+                let floorContainer = document.createElement("div")
+                floorContainer.className = "unit-floor"
+                floorContainer.id = parseInt(highestFloorDivId) + i
+                floorContainer.hidden = true
+                unitContainer.appendChild(floorContainer)
+                currentFloorDiv = floorContainer
+            }
+            floorLayout[currentFloorDiv.id] = []
+        } else if(currentFloorDiv.hidden) {
+            floorLayout[currentFloorDiv.id] = []
+        }
+
+        floorLayout[currentFloorDiv.id].push(newUnit)
+
+        currentFloorDiv.innerHTML = ""
+        let floorLabel = document.createElement("p")
+        floorLabel.innerText = `${currentFloorDiv.id}-FLOOR`
+        floorLabel.className = "floor-label"
+
+        currentFloorDiv.appendChild(floorLabel)
+
+        floorLayout[currentFloorDiv.id].sort((a, b) => a.number - b.number)
+        currentFloorDiv.hidden = false
+        for(let i = 0; i < floorLayout[currentFloorDiv.id].length; i++) {
+            let unitButton = document.createElement("button")
+            unitButton.innerHTML = floorLayout[currentFloorDiv.id][i].number
+            unitButton.className = "unit"
+            unitButton.id = floorLayout[currentFloorDiv.id][i].number
+            currentFloorDiv.appendChild(unitButton)
+                                    
+            unitButton.addEventListener('click', (event) => {
+            })
+        }
+    }
 });
