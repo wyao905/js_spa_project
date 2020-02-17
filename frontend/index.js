@@ -35,6 +35,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     unitInfo.hidden = true
     let unitCollection = document.getElementById("unit-collection")
     unitCollection.hidden = true
+    let unitForm = document.getElementsByClassName("add-unit-form")[0]
 
     let floorLayout = []
 
@@ -104,6 +105,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 addNewUnit(newPackageUnitNum)
                             }
                         })
+                })
+
+                let unitFormButton = unitForm.getElementsByClassName("submit")[0]
+                unitFormButton.addEventListener('click', (event) => {
+                    event.preventDefault()
                 })
 
                 fetch("http://localhost:3000/units")
