@@ -110,7 +110,33 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 let unitFormButton = unitForm.getElementsByClassName("submit")[0]
                 unitFormButton.addEventListener('click', (event) => {
                     event.preventDefault()
-                    console.log(allUnits)
+                    let newUnitNum = unitForm.getElementsByClassName("input-text")[0].value
+                    let newUnitTenant = unitForm.getElementsByClassName("input-text")[1].value
+                    let newUnitModel = allUnits.find(unit => unit.number === newUnitNum)
+                    if(!newUnitModel) {
+                        newUnitModel = new Unit(newUnitNum, newUnitTenant)
+                        newUnitModel.address = currentCondo.attributes.address
+
+                        let configObj = {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json"
+                            },
+                            body: JSON.stringify(newUnitModel)
+                        }
+
+                        fetch("http://localhost:3000/units", configObj)
+                            .then(function(response) {
+                                return response.json();
+                            })
+                            .then(function(unit) {
+                                addNewUnit(unit.data.attributes.number, unit.data.attributes.tenant_name)
+                            })
+                    } else {
+                        console.log("error")
+                        //display error saying unit already exists
+                    }
                 })
 
                 fetch("http://localhost:3000/units")
