@@ -110,6 +110,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 let unitFormButton = unitForm.getElementsByClassName("submit")[0]
                 unitFormButton.addEventListener('click', (event) => {
                     event.preventDefault()
+                    console.log(allUnits)
                 })
 
                 fetch("http://localhost:3000/units")
@@ -160,8 +161,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             })
     })
 
-    function addNewUnit(unitNum) {
-        let newUnit = new Unit(unitNum)
+    function addNewUnit(unitNum, tenantName) {
+        let newUnit = new Unit(unitNum, tenantName)
         allUnits.push(newUnit)
 
         let floorDivs = unitContainer.getElementsByClassName("unit-floor")
