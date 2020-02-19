@@ -144,7 +144,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         return response.json()
                     })
                     .then(function(unitList) {
-                        units = unitList.data.filter(unit => unit.relationships.condo.data.id === currentCondo.id)
+                        let units = unitList.data.filter(unit => unit.relationships.condo.data.id === currentCondo.id)
                         units.forEach(unitInfo => {
                             let unit = new Unit(unitInfo.attributes.number, unitInfo.attributes.tenant_name)
                             allUnits.push(unit)
@@ -178,7 +178,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                     floorContainer.appendChild(unitButton)
 
                                     unitButton.addEventListener('click', (event) => {
-                                        //make function for unit button show
+                                        let unit = allUnits.find(unit => unit.number === unitButton.id)
+                                        showUnitInfo(unit)
                                     })
                                 }
                             }
@@ -237,7 +238,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
             currentFloorDiv.appendChild(unitButton)
                                     
             unitButton.addEventListener('click', (event) => {
+                let unit = allUnits.find(unit => unit.number === unitButton.id)
+                showUnitInfo(unit)
             })
         }
+    }
+
+    function showUnitInfo(unit) {
+        let unitNumTitle = document.createElement("h3")
+        unitNumTitle.
     }
 });
