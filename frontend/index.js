@@ -37,6 +37,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     unitCollection.hidden = true
     let unitForm = document.getElementsByClassName("add-unit-form")[0]
 
+    //unit info show section
+    let unitNumTitle = document.getElementById("unit-info-title")
+    let unitTenantNameForm = document.getElementById("unit-info-name")
+    let unitTenantName = unitTenantNameForm.getElementsByTagName("p")[0]
+
     let floorLayout = []
 
     condoFormButton.addEventListener('click', (event) => {
@@ -245,16 +250,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function showUnitInfo(unit) {
-        // let unitNumTitle = document.createElement("h3")
-        unitNumTitle.innerText = unit.number
-        unitNumTitle.id = "show-info-title"
-        // let unitTenantName = document.createElement("p")
-        unitTenantName.id = "show-info-name"
+        unitNumTitle.innerText = `UNIT ${unit.number}`
+        unitNumTitle.hidden = false
+
         if(!!unit.tenantName) {
             unitTenantName.innerText = unit.tenantName
         } else {
-            unitTenantName.innerText = "N/A"
+            unitTenantName.innerText = "No Tenant Assigned"
         }
+        unitTenantNameForm.hidden = false
 
         // let unitForm = document.createElement
     }
