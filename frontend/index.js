@@ -245,7 +245,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function showUnitInfo(unit) {
-        let unitNumTitle = document.createElement("h3")
-        unitNumTitle.
+        // let unitNumTitle = document.createElement("h3")
+        unitNumTitle.innerText = unit.number
+        unitNumTitle.id = "show-info-title"
+        // let unitTenantName = document.createElement("p")
+        unitTenantName.id = "show-info-name"
+        if(!!unit.tenantName) {
+            unitTenantName.innerText = unit.tenantName
+        } else {
+            unitTenantName.innerText = "N/A"
+        }
+
+        // let unitForm = document.createElement
     }
 });
