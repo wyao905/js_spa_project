@@ -41,6 +41,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let unitNumTitle = document.getElementById("unit-info-title")
     let unitTenantNameForm = document.getElementById("unit-info-name")
     let unitTenantName = unitTenantNameForm.getElementsByTagName("p")[0]
+    let unitTenantBut = unitTenantNameForm.getElementsByClassName("submit")[0]
 
     let floorLayout = []
 
@@ -107,7 +108,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             let newPackageUnitNum = package.included[0].attributes.number
                             let foundUnit = allUnits.find(unit => unit.number === newPackageUnitNum)
                             if(!foundUnit) {
-                                addNewUnit(newPackageUnitNum)
+                                addNewUnit(newPackageUnitNum, undefined, package.included[0].id)
                             }
                         })
                 })
@@ -136,7 +137,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 return response.json();
                             })
                             .then(function(unit) {
-                                addNewUnit(unit.data.attributes.number, unit.data.attributes.tenant_name)
+                                addNewUnit(unit.data.attributes.number, unit.data.attributes.tenant_name, unit.data.id)
                             })
                     } else {
                         console.log("error")
@@ -150,14 +151,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     })
                     .then(function(unitList) {
                         let units = unitList.data.filter(unit => unit.relationships.condo.data.id === currentCondo.id)
-                        units.forEach(unitInfo => {
-                            let unit = new Unit(unitInfo.attributes.number, unitInfo.attributes.tenant_name)
+                        for(let i = 0; i < units.length; i++) {
+                            let unit = new Unit(units[i].attributes.number, units[i].attributes.tenant_name)
+                            unit.id = units[i].id
                             allUnits.push(unit)
                             if(!Object.keys(floorLayout).includes(unit.number.charAt(0))) {
                                 floorLayout[unit.number.charAt(0)] = []
                             }
                             floorLayout[unit.number.charAt(0)].push(unit)
-                        })
+                        }
                         
                         let floors = Object.keys(floorLayout)
                         for(let i = 0; i <= floors.slice(-1)[0]; i++) {
@@ -193,8 +195,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
             })
     })
 
-    function addNewUnit(unitNum, tenantName) {
+    function addNewUnit(unitNum, tenantName, unitId) {
         let newUnit = new Unit(unitNum, tenantName)
+        newUnit.id = unitId
         allUnits.push(newUnit)
 
         let floorDivs = unitContainer.getElementsByClassName("unit-floor")
@@ -250,7 +253,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function showUnitInfo(unit) {
-        unitNumTitle.innerText = `UNIT ${unit.number}`
+        unitNumTitle.innerText = `UNIT ${unit.number}: ID ${unit.id}`
         unitNumTitle.hidden = false
 
         if(!!unit.tenantName) {
@@ -260,6 +263,26 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
         unitTenantNameForm.hidden = false
 
-        // let unitForm = document.createElement
+        unitTenantBut.addEventListener('click', (event) => {
+            event.preventDefault()
+
+            let configObj = {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(unit)
+            }
+
+            // fetch("http://localhost:3000/units", configObj)
+            //     .then(function(response) {
+            //         return response.json();
+            //     })
+            //     .then(function(unit) {
+            //         addNewUnit(unit.data.attributes.number, unit.data.attributes.tenant_name)
+            //     })
+
+        })
     }
 });
