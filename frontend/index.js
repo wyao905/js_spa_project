@@ -253,7 +253,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function showUnitInfo(unit) {
-        unitNumTitle.innerText = `UNIT ${unit.number}: ID ${unit.id}`
+        unitNumTitle.innerText = `UNIT ${unit.number}`
         unitNumTitle.hidden = false
 
         if(!!unit.tenantName) {
@@ -265,6 +265,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         unitTenantBut.addEventListener('click', (event) => {
             event.preventDefault()
+            
+            let newTenantName = document.getElementById("input-unit-info").value
+            unit.tenantName = newTenantName
 
             let configObj = {
                 method: "PATCH",
@@ -275,13 +278,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 body: JSON.stringify(unit)
             }
 
-            // fetch("http://localhost:3000/units", configObj)
-            //     .then(function(response) {
-            //         return response.json();
-            //     })
-            //     .then(function(unit) {
-            //         addNewUnit(unit.data.attributes.number, unit.data.attributes.tenant_name)
-            //     })
+            fetch(`http://localhost:3000/units/${unit.id}`, configObj)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(unit) {
+                })
 
         })
     }
