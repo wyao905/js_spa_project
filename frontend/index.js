@@ -1,5 +1,4 @@
 let currentCondo
-let allCondos = []
 let allUnits = []
 let allPackages = []
 
@@ -17,10 +16,11 @@ class Unit {
 }
 
 class Package {
-    constructor(address, courier, unit) {
+    constructor(address, courier, unit, time) {
         this.address = address
         this.courier = courier
         this.unit = unit
+        this.delivered = time
     }
 }
 
@@ -109,6 +109,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             let foundUnit = allUnits.find(unit => unit.number === newPackageUnitNum)
                             if(!foundUnit) {
                                 addNewUnit(newPackageUnitNum, undefined, package.included[0].id)
+                                //need to add package to allPackages
                             }
                         })
                 })
@@ -221,6 +222,23 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 inputName.value = ""
             })
     })
+
+    fetch("http://localhost:3000/packages")
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(packageInfo) {
+            for(let i = 0; i < packageInfo.data.length; i++) {
+                let pAdd = packageInfo.data[i].attributes.address
+                let pCour = packageInfo.data[i].attributes.courier
+                // let pNum = 
+                let pDel = packageInfo.data[i].attributes.created_at
+                // let package = new Package()
+            }           
+
+            console.log(packageInfo)
+            console.log(allUnits[0])
+        })
 
     function addNewUnit(unitNum, tenantName, unitId) {
         let newUnit = new Unit(unitNum, tenantName)
