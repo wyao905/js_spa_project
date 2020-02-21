@@ -194,6 +194,31 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     })
             })
     })
+    
+    unitTenantBut.addEventListener('click', (event) => {
+        event.preventDefault()
+            
+        let newTenantName = document.getElementById("input-unit-info").value
+        let unit = allUnits.find(unit => unit.number === unitNumTitle.innerText)
+        unit.tenantName = newTenantName
+
+        let configObj = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(unit)
+        }
+
+        fetch(`http://localhost:3000/units/${unit.id}`, configObj)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(unitInfo) {
+                unitTenantName.innerText = newTenantName
+            })
+    })
 
     function addNewUnit(unitNum, tenantName, unitId) {
         let newUnit = new Unit(unitNum, tenantName)
@@ -248,16 +273,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
             unitButton.addEventListener('click', (event) => {
                 let unit = allUnits.find(unit => unit.number === unitButton.id)
                 showUnitInfo(unit)
-                // unitTenantBut.removeEventListener('click', setButton)
-                unitTenantBut.addEventListener('click', setButton)
-
-                
             })
         }
     }
 
     function showUnitInfo(unit) {
-        unitNumTitle.innerText = `UNIT ${unit.number}`
+        unitNumTitle.innerText = unit.number
         unitNumTitle.hidden = false
         if(!!unit.tenantName) {
             unitTenantName.innerText = unit.tenantName
@@ -265,29 +286,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
             unitTenantName.innerText = "No Tenant Assigned"
         }
         unitTenantNameForm.hidden = false
-    }
-
-    function setButton(e) {
-        e.preventDefault()
-            
-        let newTenantName = document.getElementById("input-unit-info").value
-        unit.tenantName = newTenantName
-
-        let configObj = {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(unit)
-        }
-
-        fetch(`http://localhost:3000/units/${unit.id}`, configObj)
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(unitInfo) {
-                unitTenantName.innerText = newTenantName
-            })
     }
 });
