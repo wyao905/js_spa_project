@@ -197,9 +197,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     
     unitTenantBut.addEventListener('click', (event) => {
         event.preventDefault()
-            
-        let newTenantName = document.getElementById("input-unit-info").value
-        let unit = allUnits.find(unit => unit.number === unitNumTitle.innerText)
+
+        let inputName = document.getElementById("input-unit-info")
+        let newTenantName = inputName.value
+        let unit = allUnits.find(unit => unit.number === unitNumTitle.innerText.split(" ").slice(-1)[0])
         unit.tenantName = newTenantName
 
         let configObj = {
@@ -217,6 +218,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             })
             .then(function(unitInfo) {
                 unitTenantName.innerText = newTenantName
+                inputName.value = ""
             })
     })
 
@@ -278,7 +280,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function showUnitInfo(unit) {
-        unitNumTitle.innerText = unit.number
+        unitNumTitle.innerText = `UNIT ${unit.number}`
         unitNumTitle.hidden = false
         if(!!unit.tenantName) {
             unitTenantName.innerText = unit.tenantName
