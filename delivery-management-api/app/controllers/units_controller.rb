@@ -18,4 +18,10 @@ class UnitsController < ApplicationController
         options = {include: [:condo, :packages]}
         render json: UnitSerializer.new(unit, options)
     end
+
+    def update
+        unit = Unit.find(params[:id])
+        unit.update(tenant_name: params[:tenantName])
+        render json: UnitSerializer.new(unit)
+    end
 end

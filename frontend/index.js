@@ -248,6 +248,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
             unitButton.addEventListener('click', (event) => {
                 let unit = allUnits.find(unit => unit.number === unitButton.id)
                 showUnitInfo(unit)
+                // unitTenantBut.removeEventListener('click', setButton)
+                unitTenantBut.addEventListener('click', setButton)
+
+                
             })
         }
     }
@@ -255,36 +259,35 @@ window.addEventListener('DOMContentLoaded', (event) => {
     function showUnitInfo(unit) {
         unitNumTitle.innerText = `UNIT ${unit.number}`
         unitNumTitle.hidden = false
-
         if(!!unit.tenantName) {
             unitTenantName.innerText = unit.tenantName
         } else {
             unitTenantName.innerText = "No Tenant Assigned"
         }
         unitTenantNameForm.hidden = false
+    }
 
-        unitTenantBut.addEventListener('click', (event) => {
-            event.preventDefault()
+    function setButton(e) {
+        e.preventDefault()
             
-            let newTenantName = document.getElementById("input-unit-info").value
-            unit.tenantName = newTenantName
+        let newTenantName = document.getElementById("input-unit-info").value
+        unit.tenantName = newTenantName
 
-            let configObj = {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify(unit)
-            }
+        let configObj = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(unit)
+        }
 
-            fetch(`http://localhost:3000/units/${unit.id}`, configObj)
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(unit) {
-                })
-
-        })
+        fetch(`http://localhost:3000/units/${unit.id}`, configObj)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(unitInfo) {
+                unitTenantName.innerText = newTenantName
+            })
     }
 });
