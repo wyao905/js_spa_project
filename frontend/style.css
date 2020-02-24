@@ -59,6 +59,16 @@ body {
 #unit-info-name {
     margin: 10px;
 }
+
+.packages {
+    list-style: none;
+    padding: 0;
+}
+
+.package {
+    font-size: 14px;
+    margin: 15px;
+}
  
 .unit-floor {
     border: rgb(155, 157, 165) solid 1px;

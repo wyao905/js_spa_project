@@ -321,9 +321,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
         if(unitPackages.length === 0) {
             let packageList = document.createElement("p")
             packageList.innerText = "No Packages"
+            packageList.style = "margin:15px;font-size:14px;"
             packageContainer.appendChild(packageList)
         } else {
             let packageList = document.createElement("ul")
+            packageList.className = "packages"
             packageContainer.appendChild(packageList)
             for(let i = 0; i < unitPackages.length; i++) {
                 let pkg = document.createElement("li")
