@@ -42,6 +42,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let unitTenantNameForm = document.getElementById("unit-info-name")
     let unitTenantName = unitTenantNameForm.getElementsByTagName("p")[0]
     let unitTenantBut = unitTenantNameForm.getElementsByClassName("submit")[0]
+    let packageContainer = document.createElement("div")
+    packageContainer.id = "package-container"
+    unitInfo.appendChild(packageContainer)
 
     let floorLayout = []
 
@@ -109,8 +112,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             let foundUnit = allUnits.find(unit => unit.number === newPackageUnitNum)
                             if(!foundUnit) {
                                 addNewUnit(newPackageUnitNum, undefined, package.included[0].id)
-                                //need to add package to allPackages
                             }
+                            newPack.delivered = package.data.attributes.created_at
+                            allPackages.push(newPack)
                         })
                 })
 
@@ -228,16 +232,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
             return response.json();
         })
         .then(function(packageInfo) {
+            let units = packageInfo.included
             for(let i = 0; i < packageInfo.data.length; i++) {
                 let pAdd = packageInfo.data[i].attributes.address
                 let pCour = packageInfo.data[i].attributes.courier
-                // let pNum = 
-                let pDel = packageInfo.data[i].attributes.created_at
-                // let package = new Package()
-            }           
+                
+                let unit = units.find(u => u.id === packageInfo.data[i].relationships.unit.data.id)
+                let pNum = unit.attributes.number
 
-            console.log(packageInfo)
-            console.log(allUnits[0])
+                let pDel = packageInfo.data[i].attributes.created_at
+                let packageModel = new Package(pAdd, pCour, pNum, pDel)
+
+                allPackages.push(packageModel)
+            }
         })
 
     function addNewUnit(unitNum, tenantName, unitId) {
@@ -306,5 +313,20 @@ window.addEventListener('DOMContentLoaded', (event) => {
             unitTenantName.innerText = "No Tenant Assigned"
         }
         unitTenantNameForm.hidden = false
+        
+        let unitPackages = allPackages.filter(package => package.address === currentCondo.attributes.address && package.unit === unit.number)
+
+        let packageContainer = document.createElement("div")
+        packageContainer.id = "package-container"
+        unitInfo.appendChild(packageContainer)
+        
+        if(unitPackages.length === 0) {
+            let packageList = document.createElement("p")
+            packageList.innerText = "No Packages"
+        } else {
+            let packageList = document.createElement("")
+        }
+
+        unitInfo.appendChild(packageList)
     }
 });
