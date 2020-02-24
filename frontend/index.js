@@ -42,9 +42,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let unitTenantNameForm = document.getElementById("unit-info-name")
     let unitTenantName = unitTenantNameForm.getElementsByTagName("p")[0]
     let unitTenantBut = unitTenantNameForm.getElementsByClassName("submit")[0]
-    let packageContainer = document.createElement("div")
-    packageContainer.id = "package-container"
-    unitInfo.appendChild(packageContainer)
+    let packageContainer = unitInfo.getElementsByClassName("package-container")[0]
 
     let floorLayout = []
 
@@ -114,6 +112,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 addNewUnit(newPackageUnitNum, undefined, package.included[0].id)
                             }
                             newPack.delivered = package.data.attributes.created_at
+                            newPack.id = package.data.id
                             allPackages.push(newPack)
                         })
                 })
@@ -243,6 +242,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 let pDel = packageInfo.data[i].attributes.created_at
                 let packageModel = new Package(pAdd, pCour, pNum, pDel)
 
+                packageModel.id = packageInfo.data[i].id
+
                 allPackages.push(packageModel)
             }
         })
@@ -305,6 +306,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function showUnitInfo(unit) {
+        packageContainer.innerHTML = ""
         unitNumTitle.innerText = `UNIT ${unit.number}`
         unitNumTitle.hidden = false
         if(!!unit.tenantName) {
@@ -315,18 +317,23 @@ window.addEventListener('DOMContentLoaded', (event) => {
         unitTenantNameForm.hidden = false
         
         let unitPackages = allPackages.filter(package => package.address === currentCondo.attributes.address && package.unit === unit.number)
-
-        let packageContainer = document.createElement("div")
-        packageContainer.id = "package-container"
-        unitInfo.appendChild(packageContainer)
         
         if(unitPackages.length === 0) {
             let packageList = document.createElement("p")
             packageList.innerText = "No Packages"
+            packageContainer.appendChild(packageList)
         } else {
-            let packageList = document.createElement("")
+            let packageList = document.createElement("ul")
+            packageContainer.appendChild(packageList)
+            for(let i = 0; i < unitPackages.length; i++) {
+                let pkg = document.createElement("li")
+                pkg.id = unitPackages[i].id
+                pkg.className = "package"
+                pkg.innerText = `Delivery Date: ${unitPackages[i].delivered.split("T").slice(0, 1)[0]}\n` +
+                                `Time: ${unitPackages[i].delivered.split("T").slice(1)[0].slice(0, 5)}\n` +
+                                `Courier: ${unitPackages[i].courier}`
+                packageList.appendChild(pkg)
+            }
         }
-
-        unitInfo.appendChild(packageList)
     }
 });
