@@ -56,6 +56,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
         unitInfo.hidden = false
         unitContainer.hidden = false
 
+        let header = document.getElementById("address-header")
+        header.innerText = address
+
         fetch("http://localhost:3000/condos")
             .then(function(response) {
                 return response.json()

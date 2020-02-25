@@ -8,6 +8,15 @@ body {
     color: rgb(255, 255, 255);
 }
 
+#address-header {
+    color: rgb(255, 255, 255);
+    position: absolute;
+    top: 170px;
+    right: 50px;
+    font-size: 48px;
+    font-weight: bold;
+}
+
 .add-unit-form {
     padding: 0 0 10px;
 }
@@ -115,7 +124,7 @@ body {
 }
   
 .add-package-form {
-    width: 100%
+    width: 50%
 }
   
 .submit {
@@ -131,7 +140,7 @@ body {
   
 .input-text {
     height: 1rem;
-    width: 10%;
+    width: 7rem;
     font-size: 12px;
     font-family: garamond;
     margin: 3px;
