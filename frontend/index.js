@@ -115,7 +115,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             newPack.delivered = package.data.attributes.created_at
                             newPack.claimed = package.data.attributes.claimed
                             newPack.id = package.data.id
-                            console.log(newPack)
                             allPackages.push(newPack)
                         })
                 })
@@ -331,16 +330,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
             packageContainer.appendChild(packageList)
         } else {
             let claimedPackageList = document.createElement("ul")
+            claimedPackageList.className = "packages-claimed"
             let unclaimedPackageList = document.createElement("ul")
+            unclaimedPackageList.className = "packages-unclaimed"            
 
             let unclaimedHeader = document.createElement("p")
             unclaimedHeader.className = "package-header"
             unclaimedHeader.innerText = "UNCLAIMED"
             packageContainer.appendChild(unclaimedHeader)
+            packageContainer.appendChild(unclaimedPackageList)
 
             if(unitPackagesUnclaimed.length !== 0) {
-                unclaimedPackageList.className = "packages-unclaimed"
-                packageContainer.appendChild(unclaimedPackageList)
                 for(let i = 0; i < unitPackagesUnclaimed.length; i++) {
                     let pkg = document.createElement("li")
                     pkg.id = unitPackagesUnclaimed[i].id
@@ -373,8 +373,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         let newPkg = document.createElement("li")
                         newPkg.id = pkg.id
                         newPkg.className = pkg.className
-                        newPkg.innerText = pkg.innerText
-                        claimedPackageList.appendChild(pkg)
+                        newPkg.innerText = `Delivery Date: ${unitPackagesUnclaimed[i].delivered.split("T").slice(0, 1)[0]}\n` +
+                                           `Time: ${unitPackagesUnclaimed[i].delivered.split("T").slice(1)[0].slice(0, 5)}\n` +
+                                           `Courier: ${unitPackagesUnclaimed[i].courier}`
+                        claimedPackageList.appendChild(newPkg)
                     })
                 }
             }
@@ -383,10 +385,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
             claimedHeader.className = "package-header"
             claimedHeader.innerText = "CLAIMED"
             packageContainer.appendChild(claimedHeader)
+            packageContainer.appendChild(claimedPackageList)
 
             if(unitPackagesClaimed.length !== 0) {
-                claimedPackageList.className = "packages-claimed"
-                packageContainer.appendChild(claimedPackageList)
+                
                 for(let i = 0; i < unitPackagesClaimed.length; i++) {
                     let pkg = document.createElement("li")
                     pkg.id = unitPackagesClaimed[i].id
@@ -397,7 +399,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     claimedPackageList.appendChild(pkg)
                 }
             }
-            
         }
     }
 });
