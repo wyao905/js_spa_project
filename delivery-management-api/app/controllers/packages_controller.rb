@@ -24,4 +24,10 @@ class PackagesController < ApplicationController
         options = {include: [:unit]}
         render json: PackageSerializer.new(package, options)
     end
+
+    def update
+        package = Package.find_by(id: params[:id])
+        package.update(claimed: params[:claimed])
+        render json: PackageSerializer.new(package)
+    end
 end

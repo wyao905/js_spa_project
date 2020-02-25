@@ -16,12 +16,12 @@ class Unit {
 }
 
 class Package {
-    constructor(address, courier, unit, time) {
+    constructor(address, courier, unit, time, status) {
         this.address = address
         this.courier = courier
         this.unit = unit
         this.delivered = time
-        this.claimed = false
+        this.claimed = status
     }
 }
 
@@ -113,7 +113,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 addNewUnit(newPackageUnitNum, undefined, package.included[0].id)
                             }
                             newPack.delivered = package.data.attributes.created_at
+                            newPack.claimed = package.data.attributes.claimed
                             newPack.id = package.data.id
+                            console.log(newPack)
                             allPackages.push(newPack)
                         })
                 })
@@ -241,7 +243,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 let pNum = unit.attributes.number
 
                 let pDel = packageInfo.data[i].attributes.created_at
-                let packageModel = new Package(pAdd, pCour, pNum, pDel)
+                let pSta = packageInfo.data[i].attributes.claimed
+                let packageModel = new Package(pAdd, pCour, pNum, pDel, pSta)
 
                 packageModel.id = packageInfo.data[i].id
 
@@ -323,17 +326,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
         
         if(unitPackages.length === 0) {
             let packageList = document.createElement("p")
-            packageList.innerText = "No Packages"
+            packageList.innerText = "No Records"
             packageList.style = "margin:15px;font-size:14px;"
             packageContainer.appendChild(packageList)
         } else {
-            if(unitPackagesUnclaimed.length !== 0) {
-                let unclaimedHeader = document.createElement("p")
-                unclaimedHeader.className = "package-header"
-                unclaimedHeader.innerText = "UNCLAIMED"
-                packageContainer.appendChild(unclaimedHeader)
+            let claimedPackageList = document.createElement("ul")
+            let unclaimedPackageList = document.createElement("ul")
 
-                let unclaimedPackageList = document.createElement("ul")
+            let unclaimedHeader = document.createElement("p")
+            unclaimedHeader.className = "package-header"
+            unclaimedHeader.innerText = "UNCLAIMED"
+            packageContainer.appendChild(unclaimedHeader)
+
+            if(unitPackagesUnclaimed.length !== 0) {
                 unclaimedPackageList.className = "packages-unclaimed"
                 packageContainer.appendChild(unclaimedPackageList)
                 for(let i = 0; i < unitPackagesUnclaimed.length; i++) {
@@ -346,18 +351,40 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     unclaimedPackageList.appendChild(pkg)
 
                     pkg.addEventListener('click', (event) => {
-                        console.log(unitPackagesUnclaimed[i])
+                        unitPackagesUnclaimed[i].claimed = true
+
+                        let configObj = {
+                            method: "PATCH",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json"
+                            },
+                            body: JSON.stringify(unitPackagesUnclaimed[i])
+                        }
+
+                        fetch(`http://localhost:3000/packages/${unitPackagesUnclaimed[i].id}`, configObj)
+                            .then(function(response) {
+                                return response.json();
+                            })
+                            .then(function(packageInfo) {
+                            })
+                        
+                        unclaimedPackageList.removeChild(pkg)
+                        let newPkg = document.createElement("li")
+                        newPkg.id = pkg.id
+                        newPkg.className = pkg.className
+                        newPkg.innerText = pkg.innerText
+                        claimedPackageList.appendChild(pkg)
                     })
                 }
             }
 
-            if(unitPackagesClaimed.length !== 0) {
-                let claimedHeader = document.createElement("p")
-                claimedHeader.className = "package-header"
-                claimedHeader.innerText = "CLAIMED"
-                packageContainer.appendChild(claimedHeader)
+            let claimedHeader = document.createElement("p")
+            claimedHeader.className = "package-header"
+            claimedHeader.innerText = "CLAIMED"
+            packageContainer.appendChild(claimedHeader)
 
-                let claimedPackageList = document.createElement("ul")
+            if(unitPackagesClaimed.length !== 0) {
                 claimedPackageList.className = "packages-claimed"
                 packageContainer.appendChild(claimedPackageList)
                 for(let i = 0; i < unitPackagesClaimed.length; i++) {
