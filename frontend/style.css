@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-family: arial;
+    font-family: garamond;
     background-color: rgb(197, 205, 255);
 }
 
@@ -13,7 +13,7 @@ body {
 }
 
 .unit-form-title {
-    font-size: 14px;
+    font-size: 16px;
     color: rgb(255, 255, 255);
     padding: 5px 20px 0;
 }
@@ -22,7 +22,7 @@ body {
     display: inline;
     color: rgb(255, 255, 255);
     padding: 0 5px 0 20px;
-    font-size: 14px;
+    font-size: 16px;
 }
   
 #unit-collection {
@@ -52,7 +52,7 @@ body {
 #input-unit-info {
     height: 1rem;
     font-size: 12px;
-    font-family: arial;
+    font-family: garamond;
     margin: 3px;
 }
 
@@ -62,7 +62,7 @@ body {
 
 .package-header {
     margin: 45px 15px 15px;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -88,7 +88,7 @@ body {
     margin: 1rem;
     background: rgb(61, 63, 70);
     box-shadow: 3px 3px rgb(58, 58, 58);
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .floor-label {
@@ -103,24 +103,6 @@ body {
     color: rgb(255, 255, 255);
     background-color: rgb(8, 8, 8);
 }
-  
-/* button {
-    position: relative;
-    background-color: #e04b52;
-    border: none;
-    border-radius: 5px;
-    height: 3rem;
-    width: max-content;
-    color: whitesmoke;
-    font-size: 18px;
-    justify-self: center;
-}
-
-button:hover {
-    background-color: whitesmoke;
-    border: #e04b52 solid 1px;
-    color: #e04b52;
-} */
 
 .container {
     border-width: 20px;  
@@ -142,23 +124,16 @@ button:hover {
     width: max-content;
     font-size: 12px;
     justify-self: center;
-    font-family: arial;
+    font-family: garamond;
     margin: 3px;
     box-shadow: 3px 3px rgb(58, 58, 58);
 }
-  
-.submit:hover {
-    background-color: whitesmoke;
-    border: #e04b52 solid 1px;
-    color: #e04b52;
-}
-  
   
 .input-text {
     height: 1rem;
     width: 10%;
     font-size: 12px;
-    font-family: arial;
+    font-family: garamond;
     margin: 3px;
 }
   
