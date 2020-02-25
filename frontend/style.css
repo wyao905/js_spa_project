@@ -60,9 +60,21 @@ body {
     margin: 10px;
 }
 
-.packages {
+.package-header {
+    margin: 45px 15px 15px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.packages-unclaimed {
     list-style: none;
     padding: 0;
+}
+
+.packages-claimed {
+    list-style: none;
+    padding: 0;
+    color: rgb(175, 175, 175);
 }
 
 .package {

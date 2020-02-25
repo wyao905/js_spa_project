@@ -21,6 +21,7 @@ class Package {
         this.courier = courier
         this.unit = unit
         this.delivered = time
+        this.claimed = false
     }
 }
 
@@ -317,6 +318,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
         unitTenantNameForm.hidden = false
         
         let unitPackages = allPackages.filter(package => package.address === currentCondo.attributes.address && package.unit === unit.number)
+        let unitPackagesUnclaimed = unitPackages.filter(package => !package.claimed)
+        let unitPackagesClaimed = unitPackages.filter(package => package.claimed)
         
         if(unitPackages.length === 0) {
             let packageList = document.createElement("p")
@@ -324,18 +327,50 @@ window.addEventListener('DOMContentLoaded', (event) => {
             packageList.style = "margin:15px;font-size:14px;"
             packageContainer.appendChild(packageList)
         } else {
-            let packageList = document.createElement("ul")
-            packageList.className = "packages"
-            packageContainer.appendChild(packageList)
-            for(let i = 0; i < unitPackages.length; i++) {
-                let pkg = document.createElement("li")
-                pkg.id = unitPackages[i].id
-                pkg.className = "package"
-                pkg.innerText = `Delivery Date: ${unitPackages[i].delivered.split("T").slice(0, 1)[0]}\n` +
-                                `Time: ${unitPackages[i].delivered.split("T").slice(1)[0].slice(0, 5)}\n` +
-                                `Courier: ${unitPackages[i].courier}`
-                packageList.appendChild(pkg)
+            if(unitPackagesUnclaimed.length !== 0) {
+                let unclaimedHeader = document.createElement("p")
+                unclaimedHeader.className = "package-header"
+                unclaimedHeader.innerText = "UNCLAIMED"
+                packageContainer.appendChild(unclaimedHeader)
+
+                let unclaimedPackageList = document.createElement("ul")
+                unclaimedPackageList.className = "packages-unclaimed"
+                packageContainer.appendChild(unclaimedPackageList)
+                for(let i = 0; i < unitPackagesUnclaimed.length; i++) {
+                    let pkg = document.createElement("li")
+                    pkg.id = unitPackagesUnclaimed[i].id
+                    pkg.className = "package"
+                    pkg.innerText = `Delivery Date: ${unitPackagesUnclaimed[i].delivered.split("T").slice(0, 1)[0]}\n` +
+                                    `Time: ${unitPackagesUnclaimed[i].delivered.split("T").slice(1)[0].slice(0, 5)}\n` +
+                                    `Courier: ${unitPackagesUnclaimed[i].courier}`
+                    unclaimedPackageList.appendChild(pkg)
+
+                    pkg.addEventListener('click', (event) => {
+                        console.log(unitPackagesUnclaimed[i])
+                    })
+                }
             }
+
+            if(unitPackagesClaimed.length !== 0) {
+                let claimedHeader = document.createElement("p")
+                claimedHeader.className = "package-header"
+                claimedHeader.innerText = "CLAIMED"
+                packageContainer.appendChild(claimedHeader)
+
+                let claimedPackageList = document.createElement("ul")
+                claimedPackageList.className = "packages-claimed"
+                packageContainer.appendChild(claimedPackageList)
+                for(let i = 0; i < unitPackagesClaimed.length; i++) {
+                    let pkg = document.createElement("li")
+                    pkg.id = unitPackagesClaimed[i].id
+                    pkg.className = "package"
+                    pkg.innerText = `Delivery Date: ${unitPackagesClaimed[i].delivered.split("T").slice(0, 1)[0]}\n` +
+                                    `Time: ${unitPackagesClaimed[i].delivered.split("T").slice(1)[0].slice(0, 5)}\n` +
+                                    `Courier: ${unitPackagesClaimed[i].courier}`
+                    claimedPackageList.appendChild(pkg)
+                }
+            }
+            
         }
     }
 });
