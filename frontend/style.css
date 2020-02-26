@@ -35,7 +35,7 @@ body {
 }
   
 #unit-collection {
-    margin: 1.5rem;
+    margin: 2.5rem;
     background: rgb(102, 106, 131);
     height: auto;
     opacity: 0.8;
@@ -145,4 +145,10 @@ body {
     font-family: garamond;
     margin: 3px;
 }
-  
+
+#error-message {
+    color: rgb(255, 0, 0);
+    position: absolute;
+    top: 240px;
+    left: 2.5rem;
+}

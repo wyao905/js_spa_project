@@ -45,6 +45,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let unitTenantBut = unitTenantNameForm.getElementsByClassName("submit")[0]
     let packageContainer = unitInfo.getElementsByClassName("package-container")[0]
 
+    //error message
+    let errorMsg = document.getElementById("error-message")
+
     let floorLayout = []
 
     condoFormButton.addEventListener('click', (event) => {
@@ -94,32 +97,38 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     let packageUnit = packageForm.getElementsByClassName("input-text")[1].value
                     let packageCourier = packageForm.getElementsByClassName("input-text")[2].value
 
-                    let newPack = new Package(packageAdd, packageCourier, packageUnit)
+                    if(packageAdd === "" || packageUnit === "" || packageCourier === "") {
+                        showErrorMessage("Address/Unit/Courier input is blank.")
+                    } else if(packageAdd === currentCondo.attributes.address) {
+                        let newPack = new Package(packageAdd, packageCourier, packageUnit)
 
-                    let configObj = {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json"
-                        },
-                        body: JSON.stringify(newPack)
+                        let configObj = {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json"
+                            },
+                            body: JSON.stringify(newPack)
+                        }
+
+                        fetch("http://localhost:3000/packages", configObj)
+                            .then(function(response) {
+                                return response.json();
+                            })
+                            .then(function(package) {
+                                let newPackageUnitNum = package.included[0].attributes.number
+                                let foundUnit = allUnits.find(unit => unit.number === newPackageUnitNum)
+                                if(!foundUnit) {
+                                    addNewUnit(newPackageUnitNum, undefined, package.included[0].id)
+                                }
+                                newPack.delivered = package.data.attributes.created_at
+                                newPack.claimed = package.data.attributes.claimed
+                                newPack.id = package.data.id
+                                allPackages.push(newPack)
+                            })
+                    } else {
+                        showErrorMessage("The package address does not match the building address.")
                     }
-
-                    fetch("http://localhost:3000/packages", configObj)
-                        .then(function(response) {
-                            return response.json();
-                        })
-                        .then(function(package) {
-                            let newPackageUnitNum = package.included[0].attributes.number
-                            let foundUnit = allUnits.find(unit => unit.number === newPackageUnitNum)
-                            if(!foundUnit) {
-                                addNewUnit(newPackageUnitNum, undefined, package.included[0].id)
-                            }
-                            newPack.delivered = package.data.attributes.created_at
-                            newPack.claimed = package.data.attributes.claimed
-                            newPack.id = package.data.id
-                            allPackages.push(newPack)
-                        })
                 })
 
                 let unitFormButton = unitForm.getElementsByClassName("submit")[0]
@@ -128,7 +137,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     let newUnitNum = unitForm.getElementsByClassName("input-text")[0].value
                     let newUnitTenant = unitForm.getElementsByClassName("input-text")[1].value
                     let newUnitModel = allUnits.find(unit => unit.number === newUnitNum)
-                    if(!newUnitModel) {
+                    if(newUnitNum = "") {
+                        showErrorMessage("Unit number can't be blank.")
+                    } else if(!newUnitModel) {
                         newUnitModel = new Unit(newUnitNum, newUnitTenant)
                         newUnitModel.address = currentCondo.attributes.address
 
@@ -149,8 +160,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                                 addNewUnit(unit.data.attributes.number, unit.data.attributes.tenant_name, unit.data.id)
                             })
                     } else {
-                        console.log("error")
-                        //display error saying unit already exists
+                        showErrorMessage("Unit already exists.")
                     }
                 })
 
@@ -209,26 +219,31 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         let inputName = document.getElementById("input-unit-info")
         let newTenantName = inputName.value
-        let unit = allUnits.find(unit => unit.number === unitNumTitle.innerText.split(" ").slice(-1)[0])
-        unit.tenantName = newTenantName
 
-        let configObj = {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(unit)
+        if(newTenantName === "") {
+            showErrorMessage("Name can't be blank.")
+        } else {
+            let unit = allUnits.find(unit => unit.number === unitNumTitle.innerText.split(" ").slice(-1)[0])
+            unit.tenantName = newTenantName
+
+            let configObj = {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(unit)
+            }
+
+            fetch(`http://localhost:3000/units/${unit.id}`, configObj)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(unitInfo) {
+                    unitTenantName.innerText = newTenantName
+                    inputName.value = ""
+                })
         }
-
-        fetch(`http://localhost:3000/units/${unit.id}`, configObj)
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(unitInfo) {
-                unitTenantName.innerText = newTenantName
-                inputName.value = ""
-            })
     })
 
     fetch("http://localhost:3000/packages")
@@ -403,5 +418,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 }
             }
         }
+    }
+
+    function showErrorMessage(msg) {
+        errorMsg.innerText = `*${msg}`
+        setTimeout(function() {
+            errorMsg.innerText = ""
+        }, 3000)
     }
 });
