@@ -140,7 +140,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     if(newUnitNum = "") {
                         showErrorMessage("Unit number can't be blank.")
                     } else if(!newUnitModel) {
-                        newUnitModel = new Unit(newUnitNum, newUnitTenant)
+                        newUnitModel = new Unit(unitForm.getElementsByClassName("input-text")[0].value, newUnitTenant) //Ask why newUnitNum value is being passed from above
                         newUnitModel.address = currentCondo.attributes.address
 
                         let configObj = {
