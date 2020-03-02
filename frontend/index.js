@@ -23,6 +23,8 @@ class Package {
         this.delivered = time
         this.claimed = status
     }
+
+    function
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -327,6 +329,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function showUnitInfo(unit) {
+        let unclaimedPackageList
         packageContainer.innerHTML = ""
         unitNumTitle.innerText = `UNIT ${unit.number}`
         unitNumTitle.hidden = false
@@ -349,7 +352,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         } else {
             let claimedPackageList = document.createElement("ul")
             claimedPackageList.className = "packages-claimed"
-            let unclaimedPackageList = document.createElement("ul")
+            unclaimedPackageList = document.createElement("ul")
             unclaimedPackageList.className = "packages-unclaimed"            
 
             let unclaimedHeader = document.createElement("p")
@@ -418,6 +421,43 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 }
             }
         }
+
+        fetch(`http://localhost:3000/units/${unit.id}`)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(unitInfo) {
+                let unitPackages = unitInfo.included.filter(o => o.type === "package")
+                let sortButton = document.getElementById("sort-courier")
+                sortButton.addEventListener('click', (event) => {
+                    unitPackages.sort((a, b) => {
+                        let courA = a.attributes.courier.toLowerCase()
+                        let courB = b.attributes.courier.toLowerCase()
+
+                        if(courA < courB) {
+                            return -1
+                        }
+
+                        if(courA > courB) {
+                            return 1
+                        }
+
+                        return 0
+                    })
+
+                    unclaimedPackageList.innerHTML = ""
+                    for(let i = 0; i < unitPackages.length; i++) {
+                        let pkg = document.createElement("li")
+                        console.log(unitPackages[i])
+                        pkg.id = unitPackages[i].id
+                        pkg.className = "package"
+                        pkg.innerText = `Delivery Date: ${unitPackages[i].attributes.created_at.split("T").slice(0, 1)[0]}\n` +
+                                        `Time: ${unitPackages[i].attributes.created_at.split("T").slice(1)[0].slice(0, 5)}\n` +
+                                        `Courier: ${unitPackages[i].attributes.courier}`
+                        unclaimedPackageList.appendChild(pkg)
+                    }
+                })
+            })
     }
 
     function showErrorMessage(msg) {
