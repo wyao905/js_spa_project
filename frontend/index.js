@@ -5,6 +5,7 @@ let allPackages = []
 class Condo {
     constructor(address) {
         this.address = address
+        this.floorLayout = []
     }
 }
 
@@ -23,8 +24,6 @@ class Package {
         this.delivered = time
         this.claimed = status
     }
-
-    function
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -50,8 +49,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     //error message
     let errorMsg = document.getElementById("error-message")
 
-    let floorLayout = []
-
     condoFormButton.addEventListener('click', (event) => {
         event.preventDefault()
         let address = condoForm.getElementsByClassName("input-text")[0].value
@@ -69,10 +66,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 return response.json()
             })
             .then(function(condoList) {
-                currentCondo = condoList.data.find(obj => obj.attributes.address === address)
+                let searchCondo = condoList.data.find(obj => obj.attributes.address === address)
                 
-                if(!currentCondo) {
-                    let newCondo = new Condo(address)
+                if(!searchCondo) {
+                    currentCondo = new Condo(address)
 
                     let configObj = {
                         method: "POST",
@@ -88,9 +85,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             return response.json();
                         })
                         .then(function(condo) {
-                            currentCondo = condo.data
+                            currentCondo.id = condo.id
                         })
+                } else {
+                    currentCondo = new Condo(address)
+                    currentCondo.id = searchCondo.id
                 }
+
                 let packageFormButton = packageForm.getElementsByClassName("submit")[0]
 
                 packageFormButton.addEventListener('click', (event) => {
@@ -101,7 +102,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
                     if(packageAdd === "" || packageUnit === "" || packageCourier === "") {
                         showErrorMessage("Address/Unit/Courier input is blank.")
-                    } else if(packageAdd === currentCondo.attributes.address) {
+                    } else if(packageAdd === currentCondo.address) {
                         let newPack = new Package(packageAdd, packageCourier, packageUnit)
 
                         let configObj = {
@@ -143,7 +144,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         showErrorMessage("Unit number can't be blank.")
                     } else if(!newUnitModel) {
                         newUnitModel = new Unit(unitForm.getElementsByClassName("input-text")[0].value, newUnitTenant) //Ask why newUnitNum value is being passed from above
-                        newUnitModel.address = currentCondo.attributes.address
+                        newUnitModel.address = currentCondo.address
 
                         let configObj = {
                             method: "POST",
@@ -176,13 +177,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             let unit = new Unit(units[i].attributes.number, units[i].attributes.tenant_name)
                             unit.id = units[i].id
                             allUnits.push(unit)
-                            if(!Object.keys(floorLayout).includes(unit.number.charAt(0))) {
-                                floorLayout[unit.number.charAt(0)] = []
+                            if(!Object.keys(currentCondo.floorLayout).includes(unit.number.charAt(0))) {
+                                currentCondo.floorLayout[unit.number.charAt(0)] = []
                             }
-                            floorLayout[unit.number.charAt(0)].push(unit)
+                            currentCondo.floorLayout[unit.number.charAt(0)].push(unit)
                         }
                         
-                        let floors = Object.keys(floorLayout)
+                        let floors = Object.keys(currentCondo.floorLayout)
                         for(let i = 0; i <= floors.slice(-1)[0]; i++) {
                             let floorContainer = document.createElement("div")
                             floorContainer.className = "unit-floor"
@@ -195,14 +196,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
                             floorLabel.className = "floor-label"
                             floorContainer.appendChild(floorLabel)
 
-                            if(!!floorLayout[i]) {
-                                floorLayout[i].sort((a, b) => a.number - b.number)
+                            if(!!currentCondo.floorLayout[i]) {
+                                currentCondo.floorLayout[i].sort((a, b) => a.number - b.number)
                                 floorContainer.hidden = false
-                                for(let j = 0; j < floorLayout[i].length; j++) {
+                                for(let j = 0; j < currentCondo.floorLayout[i].length; j++) {
                                     let unitButton = document.createElement("button")
-                                    unitButton.innerHTML = floorLayout[i][j].number
+                                    unitButton.innerHTML = currentCondo.floorLayout[i][j].number
                                     unitButton.className = "unit"
-                                    unitButton.id = floorLayout[i][j].number
+                                    unitButton.id = currentCondo.floorLayout[i][j].number
                                     floorContainer.appendChild(unitButton)
 
                                     unitButton.addEventListener('click', (event) => {
@@ -298,12 +299,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 unitContainer.appendChild(floorContainer)
                 currentFloorDiv = floorContainer
             }
-            floorLayout[currentFloorDiv.id] = []
+            currentCondo.floorLayout[currentFloorDiv.id] = []
         } else if(currentFloorDiv.hidden) {
-            floorLayout[currentFloorDiv.id] = []
+            currentCondo.floorLayout[currentFloorDiv.id] = []
         }
 
-        floorLayout[currentFloorDiv.id].push(newUnit)
+        currentCondo.floorLayout[currentFloorDiv.id].push(newUnit)
 
         currentFloorDiv.innerHTML = ""
         let floorLabel = document.createElement("p")
@@ -312,13 +313,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         currentFloorDiv.appendChild(floorLabel)
 
-        floorLayout[currentFloorDiv.id].sort((a, b) => a.number - b.number)
+        currentCondo.floorLayout[currentFloorDiv.id].sort((a, b) => a.number - b.number)
         currentFloorDiv.hidden = false
-        for(let i = 0; i < floorLayout[currentFloorDiv.id].length; i++) {
+        for(let i = 0; i < currentCondo.floorLayout[currentFloorDiv.id].length; i++) {
             let unitButton = document.createElement("button")
-            unitButton.innerHTML = floorLayout[currentFloorDiv.id][i].number
+            unitButton.innerHTML = currentCondo.floorLayout[currentFloorDiv.id][i].number
             unitButton.className = "unit"
-            unitButton.id = floorLayout[currentFloorDiv.id][i].number
+            unitButton.id = currentCondo.floorLayout[currentFloorDiv.id][i].number
             currentFloorDiv.appendChild(unitButton)
                                     
             unitButton.addEventListener('click', (event) => {
@@ -340,7 +341,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
         unitTenantNameForm.hidden = false
         
-        let unitPackages = allPackages.filter(package => package.address === currentCondo.attributes.address && package.unit === unit.number)
+        let unitPackages = allPackages.filter(package => package.address === currentCondo.address && package.unit === unit.number)
         let unitPackagesUnclaimed = unitPackages.filter(package => !package.claimed)
         let unitPackagesClaimed = unitPackages.filter(package => package.claimed)
         
