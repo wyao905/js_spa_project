@@ -24,6 +24,10 @@ class Package {
         this.delivered = time
         this.claimed = status
     }
+
+    sortPackagesByCourier(jsonString) {
+
+    }
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -428,7 +432,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 return response.json();
             })
             .then(function(unitInfo) {
-                let unitPackages = unitInfo.included.filter(o => o.type === "package")
+                let unitPackages = unitInfo.included.filter(o => o.type === "package" && !o.attributes.claimed)
                 let sortButton = document.getElementById("sort-courier")
                 sortButton.addEventListener('click', (event) => {
                     unitPackages.sort((a, b) => {
@@ -449,7 +453,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     unclaimedPackageList.innerHTML = ""
                     for(let i = 0; i < unitPackages.length; i++) {
                         let pkg = document.createElement("li")
-                        console.log(unitPackages[i])
                         pkg.id = unitPackages[i].id
                         pkg.className = "package"
                         pkg.innerText = `Delivery Date: ${unitPackages[i].attributes.created_at.split("T").slice(0, 1)[0]}\n` +
